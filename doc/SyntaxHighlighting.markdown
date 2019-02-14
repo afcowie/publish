@@ -11,30 +11,63 @@ As with the rest of **publish**, this is based on Pandoc's mechanisms.
 Pandoc internally uses **skylighting** which is a recent update to a long
 standing capability which uses Kate's (the KDE text editor) syntax
 definitions. Pandoc uses that library to embellish a code block with LaTeX
-commands representing the different syntax types.
+commands representing the different syntax types. It expects the following
+commands:
+
+```latex
+\AlertTok
+\AnnotationTok
+\AttributeTok
+\BaseNTok
+\BuiltInTok
+\CharTok
+\CommentTok
+\CommentVarTok
+\ConstantTok
+\ControlFlowTok
+\DataTypeTok
+\DecValTok
+\DocumentationTok
+\ErrorTok
+\ExtensionTok
+\FloatTok
+\FunctionTok
+\ImportTok
+\InformationTok
+\KeywordTok
+\NormalTok
+\OperatorTok
+\OtherTok
+\PreprocessorTok
+\RegionMarkerTok
+\SpecialCharTok
+\SpecialStringTok
+\StringTok
+\VariableTok
+\VerbatimStringTok
+\WarningTok
+```
 
 Therefore, in order to render a document containing code blocks with syntax
 highlighting, the LaTeX preamble must provide definitions for these
-commands. The built-in preamble contains, hard-coded, all the setup
-necessary for syntax highlighting to work.
+commands.
 
-The source of this is
+Default
+-------
+
+The built-in preamble contains, hard-coded, all the setup necessary for
+syntax highlighting to work. The source of this is
 [LatexPreamble.hs](https://github.com/oprdyn/publish/blob/master/src/LatexPreamble.hs#L97).
 You can copy & paste from there or simply run a render with the `-p` option
-and copy it out of the generated *00_Beginning.latex* file in _/tmp/publish-XXXXX/_.
+on an empty book file and copy this part out of the generated
+*00_Beginning.latex* file in _/tmp/publish-XXXXX/_.
 
-The _actual_ source of this is `Skylighting.Format.LaTeX`
+The _actual_ source of this is `Skylighting.Format.LaTeX`'s
 [styleToLaTeX](http://hackage.haskell.org/package/skylighting-core/docs/Skylighting-Format-LaTeX.html#v:styleToLaTeX).
-
-If you want to customize the style, you need to redefine the
-colours specified for each of the tokens.
+function.
 
 
 ```latex
-%
-% Output from Skylighting.styleToLaTeX
-%
-
 \usepackage{color}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
@@ -45,7 +78,7 @@ colours specified for each of the tokens.
 \definecolor{shadecolor}{RGB}{248,248,248}
 \newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
 \newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-Gj\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
 \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
 \newcommand{\BuiltInTok}[1]{#1}
@@ -76,6 +109,12 @@ Gj\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 ```
+
+If you want to customize the style, you need to change the the
+colours specified for each of the tokens in your preamble.
+
+Warning
+-------
 
 Requiring a user to have this in their own LaTeX preamble
 is not reflective of the quality user experience we're aspiring to in
