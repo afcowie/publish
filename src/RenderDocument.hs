@@ -260,7 +260,6 @@ convertMarkdown file =
 
             withFile target WriteMode $ \handle -> do
                 T.hPutStrLn handle latex
-                T.hPutStr handle "\n"
 
     let env' = env { intermediateFilenamesFrom = file':files }
     setApplicationState env'

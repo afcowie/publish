@@ -6,6 +6,7 @@ module Main where
 
 import Core.Program
 import Core.Text
+import GHC.IO.Encoding (setLocaleEncoding, utf8)
 
 import RenderDocument (program)
 import Environment (initial)
@@ -15,6 +16,7 @@ version = $(fromPackage)
 
 main :: IO ()
 main = do
+    setLocaleEncoding utf8
     env <- initial
     context <- configure version env (simple
         [ Option "builtin-preamble" (Just 'p') Empty [quote|
